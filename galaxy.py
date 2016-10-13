@@ -84,7 +84,24 @@ class Earth(Sun):
       if jsonp.endswith(";"):
         jsonp = jsonp[0:len(jsonp)-1]
       json = execjs.eval(jsonp)
+      # if len(json.get("keyWordDTOs")) <= 1:
+        # pass
+      print(json.get("keyWordDTOs"))
       for x in json.get("keyWordDTOs"):
+        k = x.get("keywords").strip()
+        keyword_size = len(k.split(" "))
+        if keyword == k:
+          continue
+        if keyword_size > 3:
+          if redis_db.exists("keyword:" + k) == 0:
+            count_str = x.get("count").replace(",", "")
+            count = int(count_str)
+            # redis_db.hmset("keyword:"+k, { "keyword": k, "count": count, "len": keyword_size })
+            # redis_db.lpush("taks", k)
+          else:
+            pass
+        else:
+          pass
         if redis_db.exists("keyword:" + x.get("keywords").strip()) == 0:
           print(x.get("keywords"))
           print(x.get("count"))
@@ -92,4 +109,4 @@ class Earth(Sun):
 
 if __name__ == "__main__":
   redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
-  Earth(redis_db).get_keywords("lip")
+  Earth(redis_db).get_keywords("dose of colors liquid matte lipstick lot")
