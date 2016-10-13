@@ -85,7 +85,9 @@ class Earth(Sun):
         jsonp = jsonp[0:len(jsonp)-1]
       json = execjs.eval(jsonp)
       for x in json.get("keyWordDTOs"):
-        print(x)
+        if redis_db.exists("keyword:" + x.get("keywords").strip()) == 0:
+          print(x.get("keywords"))
+          print(x.get("count"))
 
 
 if __name__ == "__main__":
