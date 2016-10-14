@@ -112,7 +112,7 @@ class Earth(Sun):
       count_str = x.get("count").replace(",", "")
       count = int(count_str)
       if keyword_size > 3 and count < 200:
-        if self.redis_db.sadd("aliexpress.com", k) == 1:
+        if self.redis_db.sadd("aliexpress:com", k) == 1:
           redis_db.hmset("aliexpress:keyword:"+k, { "keyword": k, "count": count, "len": keyword_size, "parent": keyword })
           redis_db.lpush("aliexpress:products:taks", k)
           print("target: " + k)
@@ -170,7 +170,7 @@ class Mars(Sun):
       rate_total = cc * int(x.order_number)
       cc -= 0.05
       total_price += float(x.price)
-      self.redis_db.sadd("aliexpress:products:"+keyword, x.__dict__)
+      self.redis_db.rpush("aliexpress:products:"+keyword, x.__dict__)
 
     order_rate = (1- rate_total/total_order_number) * 200
     average_price = total_price / len(products)
